@@ -10,9 +10,7 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'io.freefair.lombok' version '5.3.0'
-    id 'io.ebean' version '12.5.1'
     id 'kr.entree.spigradle' version '2.2.3'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 apply from: "$rootDir/gradle/jacoco.gradle"
@@ -36,7 +34,7 @@ spigot {
     authors = [project.property("author")]
     apiVersion = project.property("apiVersion")
     load = STARTUP
-    //    depends = ['']
+    depends = ['MythicMobs']
     //    softDepends = ['']
 }
 
@@ -53,58 +51,20 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven { url = 'https://jitpack.io' }
     spigot()
-    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://mvn.lumine.io/repository/maven-public/" }
 }
 
 dependencies {
-    compileOnly spigot(mcVersion)
+    implementation spigot(mcVersion)
 
-    implementation 'net.silthus:ebean-wrapper:2.8.1'
-    implementation 'net.silthus.configlib:configlib-bukkit:2.6.0'
-    implementation 'co.aikar:acf-paper:0.5.0-SNAPSHOT'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
-
-    implementation 'net.kyori:adventure-api:4.5.0'
-    implementation 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
-    implementation 'net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT'
-    implementation group: 'net.kyori', name: 'adventure-text-feature-pagination', version: '4.0.0-SNAPSHOT'
-    implementation group: 'net.kyori', name: 'adventure-text-serializer-plain', version: '4.5.0'
-
-    implementation group: 'io.art-framework.core', name: 'api', version: '4.5.1'
-
-    testImplementation 'io.ebean:ebean-test:12.6.0'
-
-    testImplementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testImplementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.0'
-    testImplementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.22'
-    testImplementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.32.3.2'
-    testImplementation group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+    implementation 'io.lumine.xikage:MythicMobs:4.9.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
     testImplementation "org.mockito:mockito-core:3.+"
     testImplementation 'org.assertj:assertj-core:3.+'
     testImplementation 'com.github.seeseemelk:MockBukkit-v1.16:0.20.0'
 }
-
-shadowJar {
-    classifier = ''
-    dependencies {
-        include(dependency('co.aikar:acf-paper:'))
-        include(dependency('net.silthus.configlib:configlib-bukkit:'))
-        include(dependency('net.kyori::'))
-    }
-    relocate 'co.aikar.commands', "shadow.${pluginName}.acf"
-    relocate 'co.aikar.locales', "shadow.${pluginName}.locales"
-    relocate 'de.exlll.configlib', "shadow.${pluginName}.configlib"
-    relocate 'net.kyori', "shadow.${pluginName}.text"
-}
-
-tasks.build.dependsOn(shadowJar)
-tasks.publish.dependsOn(shadowJar)
-tasks.prepareSpigotPlugins.dependsOn(shadowJar)
 
 test {
     useJUnitPlatform()
