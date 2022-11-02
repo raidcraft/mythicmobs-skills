@@ -10,7 +10,7 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'io.freefair.lombok' version '6.5.0.3'
-    id 'kr.entree.spigradle' version '2.2.3'
+    id 'kr.entree.spigradle' version '2.4.3'
 }
 
 apply from: "$rootDir/gradle/jacoco.gradle"
